@@ -1,0 +1,57 @@
+데스크톱 마법사 & 데스크톱 애플리케이션
+애플리케이션 종류 : 데스크톱 애플리케이션(.exe)
+미리 컴파일된 헤더만 활성화
+
+솔루션 탐색기 & 윈도우 탐색기에서 모두 제거
+
+1. 새 프로젝트 추가 - 정적 라이브러리 추가(Engine.lib)
+2. 새 프로젝트 추가 - 데스크톱 애플리케이션(Client)
+데스크톱 애플리케이션에서 생성된 파일 모두 제거
+pch 클래스 추가
+
+
+윈도우 탐색기에서 게임폴더 내에 Binaries, Intermediate(중간 빌드 파일), Libraries, Resource, Shader폴더 생성
+Libraries 폴더내에 Include(Header), Lib(Static, 정적 파일) 폴더 생성
+Lib& Include폴더 내에 DirextXTex(DX에서 제공하는 Textrure 로딩 라이브러리), Engine(직접 만든 Lib), FX11(Shader 편리 기능) 폴더 생성
+
+
+
+
+1. Engine솔루션 우클릭 - 속성
+출력 디렉터리 : $(SolutionDir)Libraries\Lib\Engine\
+중간 디렉터리 : $(SolutionDir)Intermediate\$(Configuration)\
+C/C++ - 일반 - 추가 포함 디렉터리 : $(SolutionDir)Libraries\Include\;
+C/C++ - 미리 컴파일된 헤더 : 사용, pch.h
+라이브러리 관리자 - 일반  - 추가 라이브러리 디렉터리 : $(SolutionDir)Libraries\Lib\;
+빌드 이벤트 - 빌드 전 이벤트 - 명령줄 (헤더파일과 inl파일 별도로 몰아두기(복사), 참조하기 위함)
+xcopy /Y "$(SolutionDir)Engine\*.h" "$(SolutionDir)Libraries\Include\Engine"   (Engine폴더에 있는 .h파일을 모두Libraries\Include\Engine폴더에 복사한다 )
+xcopy /Y "$(SolutionDir)Engine\*.inl" "$(SolutionDir)Libraries\Include\Engine"
+
+
+2. Client솔루션 우클릭 - 속성
+출력 디렉터리 : $(SolutionDir)Libraries\Lib\Binaries\
+중간 디렉터리 : $(SolutionDir)Intermediate\$(Configuration)\
+C/C++ - 일반 - 추가 포함 디렉터리 : $(SolutionDir)Libraries\Include\;      $(SolutionDir)Libraries\Include\Engine\(직접 제작한 기능도 사용하기 위함)
+C/C++ - 미리 컴파일된 헤더 : 사용, pch.h
+링커 - 일반  - 추가 라이브러리 디렉터리 : $(SolutionDir)Libraries\Lib\;
+pch.cpp - 속성 - 미리컴파일된 헤더 : 만들기
+
+
+Engine에 필터 추가하기
+00.Engine
+01.Graphics
+02.Managers
+03.Actors
+04.Component
+98.Utils
+99.Header
+
+Engine.cpp 제거
+freamework.h에 있는 #define 복사해서 pch.h에 복사하고 제거
+
+
+
+Shader 속성
+1. 진입점 이름 변경
+2. 셰이더 모델은 DX11이기 때문에 5.0버전 사용
+3. 셰이더 형식을 효과(/fx)으로 변경
