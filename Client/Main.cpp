@@ -6,6 +6,7 @@
 // Client
 #include "01. TriangleDemo.h"
 #include "02. QuadDemo.h"
+#include "03. ConstBufferDemo.h"
 
 // 프로그램 시작 함수
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -19,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.height = 600;
 	desc.clearColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
 	// 실행시킬 앱(실행 단위)
-	desc.app = make_shared<QuadDemo>();
+	desc.app = make_shared<ConstBufferDemo>();
 
 	GAME->Run(desc);
 
