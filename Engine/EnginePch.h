@@ -71,8 +71,7 @@ using namespace Microsoft::WRL;
 #include "ConstantBuffer.h"
 #include "Shader.h"
 #include "IExecute.h"
-
-//#include "GameObject.h"
-//#include "Transform.h"
-//#include "Texture.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "Texture.h"
 //#include "Mesh.h"

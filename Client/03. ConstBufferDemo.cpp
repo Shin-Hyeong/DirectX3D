@@ -68,5 +68,6 @@ void ConstBufferDemo::Render()
 	DC->IASetIndexBuffer(_indexBuffer->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	// 원하는 정점의 수만큼 원하는 technique, pass을 적용
+	// technique, pass, 적용할 Index 갯수, 시작 Index 번호, 시작 정점 위치
 	_shader->DrawIndexed(0, 1, _indexBuffer->GetCount(), 0 , 0);
 }
