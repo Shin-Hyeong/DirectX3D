@@ -17,6 +17,7 @@ void Texture::Load(const wstring& path)
 	HRESULT hr = ::LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &md, _img);
 	CHECK(hr);
 
+	// SRV »ý¼º
 	hr = ::CreateShaderResourceView(DEVICE.Get(), _img.GetImages(), _img.GetImageCount(), md, _shaderResourveView.GetAddressOf());
 	CHECK(hr);
 	

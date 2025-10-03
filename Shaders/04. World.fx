@@ -2,7 +2,7 @@
 struct VertexInput
 {
 	float4 position : POSITION;
-    float4 color : COLOR;
+    float2 uv : TEXCOORD;
 };
 
 // VS 나가는 구조체
@@ -10,7 +10,7 @@ struct VertexOutput
 {
 	// SV : System Value
 	float4 position : SV_POSITION;
-    float4 color : COLOR;
+    float2 uv : TEXCOORD;
 };
 
 cbuffer TransformBuffer : register(b0)
@@ -31,16 +31,20 @@ VertexOutput VS(VertexInput input)
     output.position = mul(input.position, World);
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
-
 	
-    output.color = input.color;
-
+    output.uv = input.uv;
+	 
 	return output;
 }
 
+// Texture에서 어떤 방식으로 색상을 추출할지 결정하는 객체
+// UV좌표를 벗어나는 영역(1,1) 처리
+SamplerState Sampler0 : register(s0);
+Texture2D Texture0 : register(t0);
+
 float4 PS(VertexOutput input) : SV_TARGET
 {
-	return input.color;
+    return Texture0.Sample(Sampler0, input.uv);
 }
 
 // 와이퍼 프레임으로 보이도록 설정
@@ -48,8 +52,6 @@ RasterizerState FillModeWireFrame
 {
     FillMode = Wireframe;
 };
-
-
 
 // 어떤 Shader를 사용할지 선택할 수 있음
 // technique : 렌더링 기법을 의미하며, 하나 이상의 pass를 포함하는 상위 블록

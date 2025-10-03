@@ -10,6 +10,7 @@ public:
 
 	ComPtr<ID3D11ShaderResourceView> GetComPtr() { return _shaderResourveView; }
 
+	// 경로에서 파일 불러오기
 	virtual void Load(const wstring& path) override;
 
 	Vec2 GetSize() { return _size; }
