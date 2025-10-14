@@ -39,7 +39,7 @@ public:
 	// Camera 반환
 	shared_ptr<Camera> GetCamera();
 	// Mesh Renderer 반환
-	// shared_ptr<MeshRenderer> GetMeshRenderer();
+	shared_ptr<MeshRenderer> GetMeshRenderer();
 	// Animator 반환
 	// shared_ptr<Animator> GetAnimator();
 

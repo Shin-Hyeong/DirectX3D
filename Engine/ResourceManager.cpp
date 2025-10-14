@@ -11,19 +11,19 @@ void ResourceManager::Init()
 
 void ResourceManager::CreateDefaultMesh()
 {
-	//{
-	//	shared_ptr<Mesh> mesh = make_shared<Mesh>();
-	//	mesh->CreateQuad();
-	//	Add(L"Quad", mesh);
-	//}
-	//{
-	//	shared_ptr<Mesh> mesh = make_shared<Mesh>();
-	//	mesh->CreateCube();
-	//	Add(L"Cube", mesh);
-	//}
-	//{
-	//	shared_ptr<Mesh> mesh = make_shared<Mesh>();
-	//	mesh->CreateSphere();
-	//	Add(L"Sphere", mesh);
-	//}
+	{
+		shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		mesh->CreateQuad();
+		Add(L"Quad", mesh);
+	}
+	{
+		shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		mesh->CreateCube();
+		Add(L"Cube", mesh);
+	}
+	{
+		shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		mesh->CreateSphere();
+		Add(L"Sphere", mesh);
+	}
 }

@@ -106,6 +106,8 @@ ResourceType ResourceManager::GetResourceType()
 		return ResourceType::Shader;
 	if (std::is_same_v<T, Texture>)
 		return ResourceType::Texture;
+	if (std::is_same_v<T, Mesh>)
+		return ResourceType::Mesh;
 
 
 	assert(false);
