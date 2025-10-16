@@ -20,14 +20,16 @@ void MeshRenderer::Update()
 	if (_mesh == nullptr || _texture == nullptr || _shader == nullptr)
 		return;
 
-	// 월드 좌표
-	auto world = GetTransform()->GetWorldMatrix();
-	_shader->GetMatrix("World")->SetMatrix((float*)&world);
-	
-	_shader->GetMatrix("View")->SetMatrix((float*)&Camera::S_MatView);
-	_shader->GetMatrix("Projection")->SetMatrix((float*)&Camera::S_MatProjection);
 	// Texture
 	_shader->GetSRV("Texture0")->SetResource(_texture->GetComPtr().Get());
+
+	// 월드 좌표
+	auto world = GetTransform()->GetWorldMatrix();
+	// World 좌표를 ConstantBuffer에 삽입 후 DeviceContext에 전달
+	RENDER->PushTransformData(TransformDesc{world});
+	// View, Projection은 물체마다 개별 계산이 아닌 Global적으로 통합으로 계산하는 것이 좋음
+	// - RenderManager의 Update()에서 계산하도록 설정
+	
 	
 	// Light (임시)
 	Vec3 lightDir = {0.f, 0.f, 1.f};

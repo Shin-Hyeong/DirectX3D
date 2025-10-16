@@ -16,18 +16,23 @@ public:
 private:
 	void CreateDeviceAndSwapChain();
 	void CreateRenderTargetView();
+	void CreateDepthStencilView();
 	void SetViewport();
 
 private:
 	HWND _hwnd = {};
 
 	// Device & SwapChain
-	ComPtr<ID3D11Device> _device = nullptr;
-	ComPtr<ID3D11DeviceContext> _deviceContext = nullptr;
-	ComPtr<IDXGISwapChain> _swapChain = nullptr;
+	ComPtr<ID3D11Device>				_device = nullptr;
+	ComPtr<ID3D11DeviceContext>			_deviceContext = nullptr;
+	ComPtr<IDXGISwapChain>				_swapChain = nullptr;
 
-	// RTV
-	ComPtr<ID3D11RenderTargetView> _renderTargetView;
+	// RTV, 최종 결과물을 그려주기 위한 View
+	ComPtr<ID3D11RenderTargetView>		_renderTargetView;
+
+	// DSV
+	ComPtr<ID3D11Texture2D>				_depthStencilTexture;
+	ComPtr<ID3D11DepthStencilView>		_depthStencilView;
 
 	// Misc
 	D3D11_VIEWPORT _viewport = { 0 };
