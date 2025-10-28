@@ -27,3 +27,12 @@ struct VertexTextureNormalData
 	Vec2 uv = { 0, 0 };
 	Vec3 normal = { 0, 0, 0 };
 };
+
+// Normal Map를 추가한 구조체
+struct VertexTextureNormalTangentData
+{
+	Vec3 position = { 0, 0, 0 };	// 정점 위치
+	Vec2 uv = { 0, 0 };				// Texture를 맵핑할 uv
+	Vec3 normal = { 0, 0, 0 };		// 정점의 normal
+	Vec3 tangent = { 0, 0, 0 };		// Tangent Space
+};

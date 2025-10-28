@@ -17,6 +17,16 @@ void RenderManager::Init(shared_ptr<Shader> shader)
 	_transformBuffer->Create();
 	// Shader에서 TransformBuffer 생성
 	_transformEffectBuffer = _shader->GetConstantBuffer("TransformBuffer");
+
+	// Light관련 Desc를 전달하는 ConstantBuffer 생성
+	_lightBuffer = make_shared<ConstantBuffer<LightDesc>>();
+	_lightBuffer->Create();
+	_lightEffectBuffer = _shader->GetConstantBuffer("LightBuffer");
+
+	// Material관련 Desc를 전달한 ConstantBuffer 생성
+	_materialBuffer = make_shared<ConstantBuffer<MaterialDesc>>();
+	_materialBuffer->Create();
+	_materialEffectBuffer = _shader->GetConstantBuffer("MaterialBuffer");
 }
 
 void RenderManager::Update()
@@ -31,6 +41,8 @@ void RenderManager::PushGlobalData(const Matrix& view, const Matrix& projection)
 	_globalDesc.View = view;
 	_globalDesc.Projection = projection;
 	_globalDesc.VP = view * projection;
+	_globalDesc.VInv = view.Invert();
+
 	// ConstantBuffer에 데이터 삽입
 	_globalBuffer->CopyData(_globalDesc);
 	// DeviceContext에 데이터 전달
@@ -44,4 +56,18 @@ void RenderManager::PushTransformData(const TransformDesc& desc)
 	_transformBuffer->CopyData(_transformDesc);
 	// DeviceContext에 데이터 전달
 	_transformEffectBuffer->SetConstantBuffer(_transformBuffer->GetComPtr().Get());
+}
+
+void RenderManager::PushLightData(const LightDesc& desc)
+{
+	_lightDesc = desc;
+	_lightBuffer->CopyData(_lightDesc);
+	_lightEffectBuffer->SetConstantBuffer(_lightBuffer->GetComPtr().Get());
+}
+
+void RenderManager::PushMaterialData(const MaterialDesc& desc)
+{
+	_materialDesc = desc;
+	_materialBuffer->CopyData(_materialDesc);
+	_materialEffectBuffer->SetConstantBuffer(_materialBuffer->GetComPtr().Get());
 }
