@@ -25,6 +25,11 @@ public:
 	template<typename T>
 	ResourceType GetResourceType();
 
+	// Key값으로 저장된 Resource가 있는지 확인 후 없으면 경로에서 불러오기
+	// @param key : ResourceManger에 저장된/될 파일의 key
+	// @param path : 만약 ResourceManger에 없다면 해당 경로에서 파일을 불러옴.
+	shared_ptr<Texture> GetOrAddTexture(const wstring& key, const wstring& path);
+
 private:
 	void CreateDefaultMesh();
 
