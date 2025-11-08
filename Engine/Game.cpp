@@ -18,6 +18,7 @@ WPARAM Game::Run(GameDesc& desc)
 	GRAPHICS->Init(_desc.hWnd);
 	TIME->Init();
 	INPUT->Init(_desc.hWnd);
+	GUI->Init();
 	
 	_desc.app->Init();
 
@@ -78,8 +79,15 @@ BOOL Game::InitInstance(int cmdShow)
 	return TRUE;
 }
 
+// ImGUI 입력 핸들 함수 선방 선언
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK Game::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	// Win Api에서 입력을  ImGUI에서도 반응하도록 추가
+	if (ImGui_ImplWin32_WndProcHandler(handle, message, wParam, lParam))
+		return true;
+
 	switch (message)
 	{
 	case WM_SIZE:
@@ -100,10 +108,14 @@ void Game::Update()
 	INPUT->Update();
 
 	GRAPHICS->RenderBegin();
+	// ImGUI의 RenderBegin()
+	GUI->Update();
 
 	_desc.app->Update();
 	_desc.app->Render();
 
+	// ImGUI의 RenderEnd()
+	GUI->Render();
 	GRAPHICS->RenderEnd();
 }
 

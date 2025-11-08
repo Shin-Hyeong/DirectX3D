@@ -44,6 +44,11 @@ using namespace Microsoft::WRL;
 #include <Assimp/scene.h>
 #include <Assimp/postprocess.h>
 
+// imGUI
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTex/DirectXTex_debug.lib")
 #pragma comment(lib, "FX11/Effects11d.lib")
@@ -61,6 +66,7 @@ using namespace Microsoft::WRL;
 #include "TimeManager.h"
 #include "ResourceManager.h"
 #include "RenderManager.h"
+#include "ImGuiManager.h"
 
 // Engine
 #include "VertexData.h"
