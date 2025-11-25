@@ -44,8 +44,8 @@ struct VertexTextureNormalTangentBlendData
 	Vec2 uv = { 0, 0 };						// Texture를 맵핑할 uv
 	Vec3 normal = { 0, 0, 0 };				// 정점의 normal
 	Vec3 tangent = { 0, 0, 0 };				// Tangent Space
-	Vec4 blendIndices = { 0, 0, 0, 0 };		// Animation 관련
-	Vec4 blendWeights = { 0, 0, 0, 0 };
+	Vec4 blendIndices = { 0, 0, 0, 0 };		// Animation. 영향 받을 Bone Index(4개의 Bone의 영향을 받을 수 있음)
+	Vec4 blendWeights = { 0, 0, 0, 0 };		// 얼마나 각 Bone의 영향을 얼마나 받을지
 };
 
 using ModelVertexType = VertexTextureNormalTangentBlendData;

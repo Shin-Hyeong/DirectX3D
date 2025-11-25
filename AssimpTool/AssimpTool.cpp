@@ -6,30 +6,29 @@ void AssimpTool::Init()
 {
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
-		
-		// FBX를 메모리에 로드
-		converter->ReadAssetFile(L"Tank/Tank.fbx");
-		
-		// 메모리에 있는 데이터를 CustomData로 변환
-		converter->ExportMaterialData(L"Tank/Tank");
-		converter->ExportModelData(L"Tank/Tank");
 
-		// CustomData를 메모리에 로드
-
+		converter->ReadAssetFile(L"Kachujin/Mesh.fbx");
+		converter->ExportMaterialData(L"Kachujin/Kachujin");
+		converter->ExportModelData(L"Kachujin/Kachujin");
 	}
-
+	// Animation
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// FBX를 메모리에 로드
-		converter->ReadAssetFile(L"Tower/Tower.fbx");
+		converter->ReadAssetFile(L"Kachujin/Idle.fbx");
+		converter->ExportAnimationData(L"kachujin/Idle");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// 메모리에 있는 데이터를 CustomData로 변환
-		converter->ExportMaterialData(L"Tower/Tower");
-		converter->ExportModelData(L"Tower/Tower");
+		converter->ReadAssetFile(L"Kachujin/Run.fbx");
+		converter->ExportAnimationData(L"kachujin/Run");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// CustomData를 메모리에 로드
-
+		converter->ReadAssetFile(L"Kachujin/Slash.fbx");
+		converter->ExportAnimationData(L"kachujin/Slash");
 	}
 }
 

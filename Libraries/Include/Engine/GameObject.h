@@ -5,7 +5,7 @@ class MonoBehaviour;
 class Transform;
 class Camera;
 class MeshRenderer;
-class Animator;
+class ModelAnimator;
 class ModelRenderer;
 
 // 하나의 오브젝트, Component을 추가하지 않으면 빈 깡통과 같음
@@ -43,8 +43,8 @@ public:
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	// Model Renderer 반환
 	shared_ptr<ModelRenderer> GetModelRenderer();
-	// Animator 반환
-	// shared_ptr<Animator> GetAnimator();
+	// Model Animator 반환
+	shared_ptr<ModelAnimator> GetModelAnimator();
 
 private:
 	ComPtr<ID3D11Device>						_device;

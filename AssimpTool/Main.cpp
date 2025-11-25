@@ -9,6 +9,8 @@
 
 #include "AssimpTool.h"
 #include "StaticMeshDemo.h"
+#include "AnimationDemo.h"
+#include "TweenDemo.h"
 #include "ImGUIDemo.h"
 
 // 프로그램 시작 함수
@@ -23,8 +25,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.height = 600;
 	desc.clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	// 실행시킬 앱(실행 단위)
-	desc.app = make_shared<ImGUIDemo>();
 	// desc.app = make_shared<AssimpTool>();
+	desc.app = make_shared<TweenDemo>();
 
 	GAME->Run(desc);
 

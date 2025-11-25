@@ -4,6 +4,7 @@
 
 struct ModelBone;
 struct ModelMesh;
+struct ModelAnimation;
 
 class Model : public enable_shared_from_this<Model>
 {
@@ -12,9 +13,11 @@ public:
 	~Model();
 
 public:
+	// 사용자 설정으로 저장한 파일들을 다시 메모리상으로 로드함
 	// @param fileName : 사용자 설정한 데이터가 있는 파일 이름
 	void ReadMaterial(wstring fileName);
 	void ReadModel(wstring fileName);
+	void ReadAnimation(wstring fileName);
 
 	// Material
 	// 저장된 Material 갯수
@@ -46,6 +49,16 @@ public:
 	// 저장된 Bone에서 해당 이름으로 된 Bone 반환
 	shared_ptr<ModelBone> GetBoneByName(const wstring& name);
 
+	// Animation
+	// 저장된 Animation 개수
+	uint32 GetAnimationCount() { return _animations.size(); }
+	// 저장된 Animation 배열
+	vector<shared_ptr<ModelAnimation>>& GetAnimations() { return _animations; }
+	// 저장된 Animation의 특정 인덱스 데이터 반환
+	shared_ptr<ModelAnimation> GetAnimationByIndex(UINT index) { return (index < 0 || index >= _animations.size()) ? nullptr : _animations[index]; }
+	// 저장된 Animation에서 해당 이름으로 된 Animation 반환
+	shared_ptr<ModelAnimation> GetAnimationByName(wstring name);
+
 private:
 	// 파일을 한번 불러오면 저장하여 따로 불러올 필요 없도록 함
 	void BindCacheInfo();
@@ -62,5 +75,6 @@ private:
 	vector<shared_ptr<Material>>		_materials;
 	vector<shared_ptr<ModelBone>>		_bones;
 	vector<shared_ptr<ModelMesh>>		_meshes;
+	vector<shared_ptr<ModelAnimation>>	_animations;
 };
 
