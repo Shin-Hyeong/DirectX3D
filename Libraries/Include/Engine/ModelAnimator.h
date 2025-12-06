@@ -22,13 +22,23 @@ public:
 	ModelAnimator(shared_ptr<Shader> shader);
 	~ModelAnimator();
 
-	virtual void Update() override;
+	// virtual void Update() override;
+
+	// TweenDesc는 Instancing하지 않고 개별적으로 관리함.
+	// TweenData를 갱신함
+	void UpdateTweenData();
 
 	void SetModel(shared_ptr<Model> model);
 	void SetPass(uint8 pass) { _pass = pass; }
 
+	void RenderInstancing(shared_ptr<class InstancingBuffer>& buffer);
+	InstanceID GetInstanceID();
+	TweenDesc& GetTweenDesc() { return _tweenDesc; }
+
 private:
 	// _animTransforms에 저장된 Matrix를 Texture으로 전환
+	// 매 Frame마다 Bone의 위치를 저장하는 Texture
+	// Shader의 TransformMap에 전달함
 	void CreateTexture();
 	// Animation의 frame마다 bone의 SRT행렬을 구함.
 	// @params index : _model에 저장된 Animation index(순서)
@@ -43,8 +53,6 @@ private:
 	ComPtr<ID3D11ShaderResourceView>	_srv;
 
 
-	// Keyframe에 대한 정보
-	KeyframeDesc						_keyframeDesc;
 	// Tween에 대한 정보
 	TweenDesc							_tweenDesc;
 

@@ -8,7 +8,9 @@
 ModelAnimator::ModelAnimator(shared_ptr<Shader> shader) 
 	: Super(ComponentType::Animator), _shader(shader)
 {
-
+	// test
+	_tweenDesc.next.animIndex = rand() % 3;		// Animation 랜덤 선택 후 재생
+	_tweenDesc.tweenSumTime += rand() % 100;	// Animation 재생 길이 램덤 설정
 }
 
 ModelAnimator::~ModelAnimator()
@@ -165,17 +167,150 @@ ModelAnimator::~ModelAnimator()
 // 	}
 // }
 
-
 // Tween을 적용한 버전
-void ModelAnimator::Update()
+// void ModelAnimator::Update()
+// {
+// 	// Model이 없으면
+// 	if (_model == nullptr)
+// 		return;
+// 
+// 	if (_texture == nullptr)
+// 		CreateTexture();
+// 
+// 	TweenDesc& desc = _tweenDesc;
+// 	desc.curr.sumTime += DT;
+// 
+// 	// 현재 애니메이션
+// 	{
+// 		// 현재 재생할 Animation 가져오기
+// 		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(desc.curr.animIndex);
+// 		if (currentAnim)
+// 		{
+// 			// 1 frame 당 재생할 시간
+// 			float timePerFrame = 1 / (currentAnim->frameRate * desc.curr.speed);
+// 			// 지금 frame이 재생할 시간을 초과하면 다음 frame으로 넘어감
+// 			if (desc.curr.sumTime >= timePerFrame)
+// 			{
+// 				desc.curr.sumTime = 0;
+// 				desc.curr.currFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
+// 				desc.curr.nextFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
+// 			}
+// 
+// 			// 현재 frame과 다음 frame과의 차이를 경과시간에 따라 정점을 보간함
+// 			desc.curr.ratio = (desc.curr.sumTime / timePerFrame);
+// 		}
+// 	}
+// 
+// 	// 다음 애니메이션이 예약 되어 있다면
+// 	if (desc.next.animIndex >= 0)
+// 	{
+// 		// Tween이 진행
+// 		desc.tweenSumTime += DT;
+// 		// Tween의 총 시간과 진행된 시간에 비례해서 비율 조정
+// 		desc.tweenRatio = desc.tweenSumTime / desc.tweenDuration;
+// 
+// 		// 다음 Animation으로 다 넘어감
+// 		if (desc.tweenRatio >= 1.f)
+// 		{
+// 			// 애니메이션 교체 성공
+// 			desc.curr = desc.next;
+// 			// 설정 초기화
+// 			desc.ClearNextAnim();
+// 		}
+// 		else
+// 		{
+// 			// 교체중
+// 			// 다음 재생할 Animation 가져오기
+// 			shared_ptr<ModelAnimation> nextAnim = _model->GetAnimationByIndex(desc.next.animIndex);
+// 			desc.next.sumTime += DT;
+// 
+// 			// 1frame당 재생할 시간
+// 			float timePerFrame = 1.f / (nextAnim->frameRate * desc.next.speed);
+// 
+// 			// 다음 Animation의 frame과 frame간의 보간
+// 			if (desc.next.ratio >= 1.f)
+// 			{
+// 				desc.next.sumTime = 0;
+// 
+// 				desc.next.currFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
+// 				desc.next.nextFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
+// 			}
+// 
+// 			desc.next.ratio = desc.next.sumTime / timePerFrame;
+// 		}
+// 	}
+// 
+// 
+// 	// Anim Update
+// 	ImGui::InputInt("AnimIdex", &desc.curr.animIndex); // Animation를 변경하는 기능
+// 	_keyframeDesc.animIndex %= _model->GetAnimationCount(); // 오버플로우 방지
+// 	
+// 	// 다음 Animation 설정
+// 	static int32 nextAnimIndex = 0;
+// 	if (ImGui::InputInt("NextAnimIndex", &nextAnimIndex))
+// 	{
+// 		nextAnimIndex %= _model->GetAnimationCount();
+// 		desc.ClearNextAnim(); // 기존 데이터 제거
+// 		desc.next.animIndex = nextAnimIndex; // 새로운 데이터 넣기
+// 	}
+// 	// Animation index 오버플로우 방지
+// 	if (_model->GetAnimationCount() > 0)
+// 		desc.curr.animIndex %= _model->GetAnimationCount();
+// 
+// 	ImGui::InputFloat("Speed", &desc.curr.speed, 0.5f, 4.f);
+// 	ImGui::InputFloat("TweenDuration", &desc.tweenDuration, 0.2f, 4.f);
+// 
+// 
+// 	// ConstantBuffer에 전달
+// 	RENDER->PushTweenData(desc);
+// 
+// 	// SRV를 통해 정보 전달
+// 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
+// 
+// 	// Bones
+// 	BoneDesc boneDesc;
+// 
+// 	const uint32 boneCount = _model->GetBoneCount();
+// 	for (uint32 i = 0; i < boneCount; i++)
+// 	{
+// 		// Model에 저장된 bone
+// 		shared_ptr<ModelBone> bone = _model->GetBoneByIndex(i);
+// 		boneDesc.transforms[i] = bone->transform;
+// 	}
+// 	// Model에 저장된 Bone의 로컬 변환 행렬을 모아서 CBuffer에 전달
+// 	RENDER->PushBoneData(boneDesc);
+// 
+// 
+// 	// Transform
+// 	// GameObject의 World 좌표 가져오기
+// 	auto world = GetTransform()->GetWorldMatrix();
+// 	// ConstantBuffer에 해당 위치로 Model 이동
+// 	RENDER->PushTransformData(TransformDesc{ world });
+// 
+// 	// Mesh 마다 갱신
+// 	const auto& meshes = _model->GetMeshes();
+// 	for (auto& mesh : meshes)
+// 	{
+// 		// Mesh에 적용된 Material 갱신
+// 		if (mesh->material)
+// 			mesh->material->Update();
+// 
+// 		// 해당 Mesh가 몇번 Bone과 연결되어 있는지
+// 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
+// 
+// 		uint32 stride = mesh->vertexBuffer->GetStride();
+// 		uint32 offset = mesh->vertexBuffer->GetOffset();
+// 
+// 		DC->IASetVertexBuffers(0, 1, mesh->vertexBuffer->GetComPtr().GetAddressOf(), &stride, &offset);
+// 		DC->IASetIndexBuffer(mesh->indexBuffer->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
+// 
+// 		_shader->DrawIndexed(0, _pass, mesh->indexBuffer->GetCount(), 0, 0);
+// 	}
+// }
+
+
+void ModelAnimator::UpdateTweenData()
 {
-	// Model이 없으면
-	if (_model == nullptr)
-		return;
-
-	if (_texture == nullptr)
-		CreateTexture();
-
 	TweenDesc& desc = _tweenDesc;
 	desc.curr.sumTime += DT;
 
@@ -238,32 +373,29 @@ void ModelAnimator::Update()
 			desc.next.ratio = desc.next.sumTime / timePerFrame;
 		}
 	}
+}
 
+void ModelAnimator::SetModel(shared_ptr<Model> model)
+{
+	_model = model;
 
-	// Anim Update
-	ImGui::InputInt("AnimIdex", &desc.curr.animIndex); // Animation를 변경하는 기능
-	_keyframeDesc.animIndex %= _model->GetAnimationCount(); // 오버플로우 방지
-	
-	// 다음 Animation 설정
-	static int32 nextAnimIndex = 0;
-	if (ImGui::InputInt("NextAnimIndex", &nextAnimIndex))
+	const auto& materials = _model->GetMaterials();
+	for (auto& material : materials)
 	{
-		nextAnimIndex %= _model->GetAnimationCount();
-		desc.ClearNextAnim(); // 기존 데이터 제거
-		desc.next.animIndex = nextAnimIndex; // 새로운 데이터 넣기
+		material->SetShader(_shader);
 	}
-	// Animation index 오버플로우 방지
-	if (_model->GetAnimationCount() > 0)
-		desc.curr.animIndex %= _model->GetAnimationCount();
+}
 
-	ImGui::InputFloat("Speed", &desc.curr.speed, 0.5f, 4.f);
-	ImGui::InputFloat("TweenDuration", &desc.tweenDuration, 0.2f, 4.f);
+void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
+{
+	// Model이 없으면
+	if (_model == nullptr)
+		return;
 
+	if (_texture == nullptr)
+		CreateTexture();
 
-	// ConstantBuffer에 전달
-	RENDER->PushTweenData(desc);
-
-	// SRV를 통해 정보 전달
+	// Animation의 SRV정보를 texture 통해 정보 전달
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
 
 	// Bones
@@ -280,11 +412,11 @@ void ModelAnimator::Update()
 	RENDER->PushBoneData(boneDesc);
 
 
-	// Transform
-	// GameObject의 World 좌표 가져오기
-	auto world = GetTransform()->GetWorldMatrix();
-	// ConstantBuffer에 해당 위치로 Model 이동
-	RENDER->PushTransformData(TransformDesc{ world });
+	// // Transform -> Instancing Buffer에서 진행됨
+	// // GameObject의 World 좌표 가져오기
+	// auto world = GetTransform()->GetWorldMatrix();
+	// // ConstantBuffer에 해당 위치로 Model 이동
+	// RENDER->PushTransformData(TransformDesc{ world });
 
 	// Mesh 마다 갱신
 	const auto& meshes = _model->GetMeshes();
@@ -297,25 +429,20 @@ void ModelAnimator::Update()
 		// 해당 Mesh가 몇번 Bone과 연결되어 있는지
 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
 
-		uint32 stride = mesh->vertexBuffer->GetStride();
-		uint32 offset = mesh->vertexBuffer->GetOffset();
+		// position, uv, normal, tangent, blendIndices, blendWeights
+		// 정점데이터를 slot0으로 전달
+		mesh->vertexBuffer->PushData();
+		mesh->indexBuffer->PushData();
 
-		DC->IASetVertexBuffers(0, 1, mesh->vertexBuffer->GetComPtr().GetAddressOf(), &stride, &offset);
-		DC->IASetIndexBuffer(mesh->indexBuffer->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
+		buffer->PushData();
 
-		_shader->DrawIndexed(0, _pass, mesh->indexBuffer->GetCount(), 0, 0);
+		_shader->DrawIndexedInstanced(0, _pass, mesh->indexBuffer->GetCount(), buffer->GetCount());
 	}
 }
 
-void ModelAnimator::SetModel(shared_ptr<Model> model)
+InstanceID ModelAnimator::GetInstanceID()
 {
-	_model = model;
-
-	const auto& materials = _model->GetMaterials();
-	for (auto& material : materials)
-	{
-		material->SetShader(_shader);
-	}
+	return make_pair((uint64)_shader.get(), (uint64)_model.get());
 }
 
 void ModelAnimator::CreateTexture()

@@ -21,7 +21,12 @@
 // #include "15. EmissiveDemo.h"
 // #include "16. LightingDemo.h"
 // #include "17. MaterialDemo.h"
-#include "18. NormalMappingDemo.h"
+// #include "18. NormalMappingDemo.h"
+#include "InstancingDemo.h"
+#include "MeshInstancingDemo.h"
+#include "ModelInstancingDemo.h"
+#include "AnimInstancingDemo.h"
+#include "RenderDemo.h"
 
 // 프로그램 시작 함수
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -35,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.height = 600;
 	desc.clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	// 실행시킬 앱(실행 단위)
-	desc.app = make_shared<NormalMappingDemo>();
+	desc.app = make_shared<RenderDemo>();
 
 	GAME->Run(desc);
 

@@ -44,6 +44,8 @@ struct MaterialDesc
 #define MAX_MODEL_TRANSFORMS 250
 // Animation의 Keyframe 허용 개수
 #define MAX_MODEL_KEYFRAMES 500
+// Model의 Instancing 허용 개수
+#define MAX_MODEL_INSTANCE 500
 
 struct BoneDesc
 {
@@ -97,6 +99,12 @@ struct TweenDesc
 	KeyframeDesc next;		// 다음 Animation의 frame
 };
 
+// shader에서 배열 형태의 TweenBuffer에 전달하기 위한 구조체
+struct InstancedTweenDesc
+{
+	TweenDesc tweens[MAX_MODEL_INSTANCE];
+};
+
 class RenderManager
 {
 	DECLARE_SINGLE(RenderManager)
@@ -111,7 +119,7 @@ public:
 	void PushMaterialData(const MaterialDesc& desc);
 	void PushBoneData(const BoneDesc& desc);
 	void PushKeyframeData(const KeyframeDesc& desc);
-	void PushTweenData(const TweenDesc& desc);
+	void PushTweenData(const InstancedTweenDesc& desc);
 
 private:
 	shared_ptr<Shader>							_shader;
@@ -153,8 +161,8 @@ private:
 	ComPtr<ID3DX11EffectConstantBuffer>			_keyframeEffectBuffer;
 
 	// Tween
-	TweenDesc									_tweenDesc;
-	shared_ptr<ConstantBuffer<TweenDesc>>		_tweenBuffer;
-	ComPtr<ID3DX11EffectConstantBuffer>			_tweenEffectBuffer;
+	InstancedTweenDesc									_tweenDesc;
+	shared_ptr<ConstantBuffer<InstancedTweenDesc>>		_tweenBuffer;
+	ComPtr<ID3DX11EffectConstantBuffer>					_tweenEffectBuffer;
 };
 

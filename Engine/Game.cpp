@@ -107,6 +107,8 @@ void Game::Update()
 	TIME->Update();
 	INPUT->Update();
 
+	ShowFps();
+
 	GRAPHICS->RenderBegin();
 	// ImGUI의 RenderBegin()
 	GUI->Update();
@@ -117,5 +119,18 @@ void Game::Update()
 	// ImGUI의 RenderEnd()
 	GUI->Render();
 	GRAPHICS->RenderEnd();
+}
+
+void Game::ShowFps()
+{
+	// 현재 fps 가져오기
+	uint32 fps = GET_SINGLE(TimeManager)->GetFps();
+
+	// fps 표시 내용을 wstring타입으로 변환
+	WCHAR text[100] = L"";
+	::wsprintf(text, L"FPS : %d", fps);
+
+	// Window 창 이름을 text으로 변경
+	::SetWindowText(_desc.hWnd, text);
 }
 
