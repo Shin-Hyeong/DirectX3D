@@ -19,6 +19,7 @@ WPARAM Game::Run(GameDesc& desc)
 	TIME->Init();
 	INPUT->Init(_desc.hWnd);
 	GUI->Init();
+	RESOURCES->Init();
 	
 	_desc.app->Init();
 
@@ -110,6 +111,10 @@ void Game::Update()
 	ShowFps();
 
 	GRAPHICS->RenderBegin();
+
+	// Scene에 있는 GameObject들의 Update() 호출
+	SCENE->Update();
+
 	// ImGUI의 RenderBegin()
 	GUI->Update();
 

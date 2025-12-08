@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "MonoBehaviour.h"
 // #include "Transform.h"
+#include "Light.h"
 #include "Camera.h"
 #include "MeshRenderer.h"
 #include "ModelRenderer.h"
@@ -158,4 +159,10 @@ shared_ptr<ModelAnimator> GameObject::GetModelAnimator()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Animator);
 	return static_pointer_cast<ModelAnimator>(component);
+}
+
+shared_ptr<Light> GameObject::GetLight()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Light);
+	return static_pointer_cast<Light>(component);
 }

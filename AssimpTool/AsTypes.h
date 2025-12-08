@@ -150,7 +150,7 @@ struct asAnimation
 {
 	string name;								// Animation 이름
 	uint32 frameCount;							// keyframe의 갯수
-	float frameRate;							// Animation 재생 프레임
+	float frameRate;							// 1초 재생할 프레임
 	float duration;								// 몇초 짜리 Animation
 	vector<shared_ptr<asKeyframe>> keyframes;	// 프레임마다 Animation이 어떤 정보(SRT)를 가지고 있는지
 };

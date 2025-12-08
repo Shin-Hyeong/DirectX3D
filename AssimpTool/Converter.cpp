@@ -122,6 +122,7 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent)
 
 	// Relative Transform : 직속부모의 좌표계
 	// mTransformation[0](Matrix[0]) :  Matrix의 첫번째 주소를 받아와서 16개의 숫자(4x4 행렬)를 저장함
+	// node->mTransformation : 부모 좌표계 -> 로컬 좌표계 변환행렬
 	Matrix transform(node->mTransformation[0]);
 	bone->transform = transform.Transpose(); // 반대 반향으로 저장되어 있어 뒤집어야함.
 	
@@ -153,7 +154,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 
 	// Name & BoneIndex
 	mesh->name = node->mName.C_Str();
-	mesh->boneIndex = bone;
+	mesh->boneIndex = bone;		// Mesh에 연결된 Bone의 Index
 
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
@@ -273,7 +274,7 @@ shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* srcAnimation)
 	// frameRate
 	animation->frameRate = static_cast<float>(srcAnimation->mTicksPerSecond);
 	// frameCount
-	// 10초이면 -> 프레임은 0번 부터 시작함 0을 채우고 동일한 10을 유지하기 위해 + 1을 함
+	// 10초이면 -> 프레임은 0번 부터 시작함. 0을 채우고 동일한 10을 유지하기 위해 + 1을 함
 	animation->frameCount = static_cast<uint32>(srcAnimation->mDuration + 1);
 
 	// 임시 저장

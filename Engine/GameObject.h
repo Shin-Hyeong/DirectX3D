@@ -7,6 +7,7 @@ class Camera;
 class MeshRenderer;
 class ModelAnimator;
 class ModelRenderer;
+class Light;
 
 // 하나의 오브젝트, Component을 추가하지 않으면 빈 깡통과 같음
 
@@ -45,6 +46,8 @@ public:
 	shared_ptr<ModelRenderer> GetModelRenderer();
 	// Model Animator 반환
 	shared_ptr<ModelAnimator> GetModelAnimator();
+	// Light 반환
+	shared_ptr<Light> GetLight();
 
 private:
 	ComPtr<ID3D11Device>						_device;
