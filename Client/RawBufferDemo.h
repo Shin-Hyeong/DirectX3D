@@ -1,0 +1,25 @@
+#pragma once
+#include "IExecute.h"
+
+class RawBufferDemo : public IExecute
+{
+	// CS()에서 반환하는 데이터를 받아주기 위한 구조체
+	struct Output
+	{
+		uint32 groupID[3];
+		uint32 groupThreadID[3];
+		uint32 dispatchThreadID[3];
+		uint32 groupIndex;
+	};
+
+public:
+
+	void Init() override;
+	void Update() override;
+	void Render() override;
+
+private:
+	shared_ptr<Shader>				_shader;
+	
+};
+
