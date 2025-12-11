@@ -23,7 +23,6 @@ public:										\
 #define TIME		GET_SINGLE(TimeManager)
 #define DT			TIME->GetDeltaTime()
 #define RESOURCES	GET_SINGLE(ResourceManager)
-#define RENDER		GET_SINGLE(RenderManager)
 #define GUI			GET_SINGLE(ImGuiManager)
 #define INSTANCING	GET_SINGLE(InstancingManager)
 #define SCENE		GET_SINGLE(SceneManager)

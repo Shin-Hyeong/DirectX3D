@@ -22,7 +22,7 @@ void Camera::Update()
 	UpdateMatrix();
 
 	// Camera View행렬, Projection행렬 업데이트
-	RENDER->Update();
+	// RENDER->Update();
 }
 
 void Camera::UpdateMatrix()

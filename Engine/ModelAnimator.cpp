@@ -4,6 +4,8 @@
 #include "ModelMesh.h"
 #include "Model.h"
 #include "ModelAnimation.h"
+#include "Light.h"
+#include "Camera.h"
 
 ModelAnimator::ModelAnimator(shared_ptr<Shader> shader) 
 	: Super(ComponentType::Animator), _shader(shader)
@@ -395,6 +397,16 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 	if (_texture == nullptr)
 		CreateTexture();
 
+	{
+		// GlobalData
+		_shader->PushGlobalData(Camera::S_MatView, Camera::S_MatProjection);
+
+		// Light
+		auto lightObj = SCENE->GetCurrentScene()->GetLight();
+		if (lightObj)
+			_shader->PushLightData(lightObj->GetLight()->GetLightDesc());
+	}
+
 	// Animation의 SRV정보를 texture 통해 정보 전달
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
 
@@ -409,7 +421,7 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 		boneDesc.transforms[i] = bone->transform;
 	}
 	// Model에 저장된 Bone의 로컬 변환 행렬을 모아서 CBuffer에 전달
-	RENDER->PushBoneData(boneDesc);
+	_shader->PushBoneData(boneDesc);
 
 
 	// // Transform -> Instancing Buffer에서 진행됨

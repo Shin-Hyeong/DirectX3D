@@ -101,7 +101,7 @@ void TextureBufferDemo::Init()
 	}
 
 	// RenderManager¿¡ Constant Àü´Þ
-	RENDER->Init(_shader);
+	// RENDER->Init(_shader);
 }
 
 void TextureBufferDemo::Update()

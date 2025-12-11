@@ -131,7 +131,7 @@ void RenderDemo::Init()
 	}
 
 	// RenderManager에 Constant 전달
-	RENDER->Init(_shader);
+	//RENDER->Init(_shader);
 }
 
 void RenderDemo::Update()
@@ -139,7 +139,7 @@ void RenderDemo::Update()
 	_camera->Update();
 
 	// Camera View행렬, Projection행렬 업데이트
-	RENDER->Update();
+	//RENDER->Update();
 
 	// Light
 	{
@@ -148,7 +148,7 @@ void RenderDemo::Update()
 		lightDesc.diffuse = Vec4(1.f);
 		lightDesc.specular = Vec4(1.f, 1.f, 1.f, 1.f);
 		lightDesc.direction = Vec3(0.f, -1.f, 0.f);
-		RENDER->PushLightData(lightDesc);
+		//RENDER->PushLightData(lightDesc);
 	}
 
 	// Scene에 있는 모든 GameObject를 전달하여 

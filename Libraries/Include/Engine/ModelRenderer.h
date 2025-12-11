@@ -12,7 +12,7 @@ public:
 	ModelRenderer(shared_ptr<Shader> shader);
 	virtual ~ModelRenderer();
 
-	virtual void Update() override;
+	// virtual void Update() override;
 
 	// Rendering할 Model 호출
 	// @param model Rendering할 model
@@ -20,6 +20,11 @@ public:
 
 	// .fx에서 사용할 pass 지정
 	void SetPass(uint8 pass) { _pass = pass; }
+
+	// 
+	void RenderInstancing(shared_ptr<class InstancingBuffer>& buffer);
+	// Objects가 사용하는 shader와 model 주소를 Map으로 묶어서 반환함
+	InstanceID GetInstanceID();
 
 private:
 	shared_ptr<Shader>		_shader;
