@@ -34,7 +34,7 @@ void Camera::UpdateMatrix()
 	// 카메라의 윗 방향
 	Vec3 upDirection = GetTransform()->GetUp();
 	// 카메라 위치, 바라보는 방향, 윗 방향을 통해 View 변환 행렬 구함
-	S_MatView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
+	_matView = S_MatView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
 	// 혹은 카메라의 matWorld의 역행렬을 사용해도 됨
 	// S_MatView = GetTransform()->GetWorldMatrix().Invert();
 	
@@ -42,12 +42,12 @@ void Camera::UpdateMatrix()
 	if (_type == ProjectionType::Perspective)
 	{
 		// 카메라의 각도(FOV, 180 / 4) , 화면 비율(800 / 600), 근거리(1), 원거리(100)
-		S_MatProjection = ::XMMatrixPerspectiveFovLH(_fov, _width/ _height, _near, _far );
+		_matProjection = S_MatProjection = ::XMMatrixPerspectiveFovLH(_fov, _width/ _height, _near, _far );
 	}
 	// 직교형
 	else
 	{
 		// 화면 가로(8), 화면 세로(6), 근거리(0), 원거리(1)
-		S_MatProjection = ::XMMatrixOrthographicLH(8, 6, 0.f, 1.f);
+		_matProjection = S_MatProjection = ::XMMatrixOrthographicLH(8, 6, 0.f, 1.f);
 	}
 }

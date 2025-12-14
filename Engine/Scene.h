@@ -17,6 +17,12 @@ public:
 	// 메인 Light 반환
 	shared_ptr<GameObject> GetLight() { return _light.empty() ? nullptr : *_light.begin(); }
 
+	// Picking
+	// 모든 GameObject, Terrain의 정점에 판정 검사를 하기 때문에 비효율적임
+	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
+
+	// 다른 Collider끼리의 충돌 감지 확인
+	void CheckCollision();
 
 private:
 	// gameobject가 삽입/삭제가 자주 일어나기 때문에 해쉬 테이블 형태를 사용함

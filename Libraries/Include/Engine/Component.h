@@ -10,6 +10,9 @@ enum class ComponentType : uint8
 	ModelRenderer,
 	Camera,
 	Animator,
+	Light,
+	Collider,
+	Terrain,
 
 	// 위로는 고정적으로 사용되는 Component
 	Script,

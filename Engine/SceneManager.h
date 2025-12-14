@@ -8,6 +8,7 @@ class SceneManager
 public:
 	void Update();
 
+
 	template<typename T>
 	void ChangeScene(shared_ptr<T> scene)
 	{

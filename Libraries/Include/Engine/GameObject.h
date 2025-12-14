@@ -8,6 +8,8 @@ class MeshRenderer;
 class ModelAnimator;
 class ModelRenderer;
 class Light;
+class BaseCollider;
+class Terrain;
 
 // 하나의 오브젝트, Component을 추가하지 않으면 빈 깡통과 같음
 
@@ -48,6 +50,10 @@ public:
 	shared_ptr<ModelAnimator> GetModelAnimator();
 	// Light 반환
 	shared_ptr<Light> GetLight();
+	// Collider반환
+	shared_ptr<BaseCollider> GetCollider();
+	// Terrain 반환
+	shared_ptr<Terrain>	GetTerrain();
 
 private:
 	ComPtr<ID3D11Device>						_device;
