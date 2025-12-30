@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Main.h"
-// Engine파일에 있는 Game
+// Engine파일에 있는 Gamec
 #include "Engine/Game.h"
 
 // Client
@@ -27,13 +27,15 @@
 // #include "ModelInstancingDemo.h"
 // #include "AnimInstancingDemo.h"
 // #include "RenderDemo.h"
-#include "SceneDemo.h"
-#include "RawBufferDemo.h"
-#include "GroupDemo.h"
-#include "TextureBufferDemo.h"
-#include "StructuredBufferDemo.h"
-#include "ViewportDemo.h"
-#include "CollisionDemo.h"
+// #include "SceneDemo.h"
+// #include "RawBufferDemo.h"
+// #include "GroupDemo.h"
+// #include "TextureBufferDemo.h"
+// #include "StructuredBufferDemo.h"
+// #include "ViewportDemo.h"
+// #include "CollisionDemo.h"
+#include "OrthographicDemo.h"
+#include "ButtonDemo.h"
 
 
 // 프로그램 시작 함수
@@ -48,7 +50,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.height = 600;
 	desc.clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	// 실행시킬 앱(실행 단위)
-	desc.app = make_shared<CollisionDemo>();
+	desc.app = make_shared<ButtonDemo>();
 
 	GAME->Run(desc);
 

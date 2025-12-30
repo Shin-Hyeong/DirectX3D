@@ -4,6 +4,7 @@
 #include "BaseCollider.h"
 #include "Camera.h"
 #include "Terrain.h"
+#include "Button.h"
 
 void Scene::Start()
 {
@@ -28,11 +29,7 @@ void Scene::Update()
 		object->Update();
 	}
 
-	// INSTANCING
-	// Update된 Object의 Instancing Render
-	vector<shared_ptr<GameObject>> temp;
-	temp.insert(temp.end(), objects.begin(), objects.end());
-	INSTANCING->Render(temp);
+	PickUI();
 }
 
 void Scene::LateUpdate()
@@ -50,6 +47,15 @@ void Scene::LateUpdate()
 	CheckCollision();
 }
 
+void Scene::Render()
+{
+	for (auto& camera : _cameras)
+	{
+		camera->GetCamera()->SortGameObject();
+		camera->GetCamera()->Render_Forward();
+	}
+}
+
 void Scene::Add(shared_ptr<GameObject> object)
 {
 	_objects.insert(object);
@@ -57,7 +63,7 @@ void Scene::Add(shared_ptr<GameObject> object)
 
 	if (object->GetCamera())
 	{
-		_camera.insert(object);
+		_cameras.insert(object);
 	}
 	if (object->GetLight())
 	{
@@ -69,15 +75,37 @@ void Scene::Remove(shared_ptr<GameObject> object)
 {
 	_objects.erase(object);
 
-	_camera.erase(object);
+	_cameras.erase(object);
 
 	_light.erase(object);
+}
+
+shared_ptr<GameObject> Scene::GetMainCamera()
+{
+	for (auto& camera : _cameras)
+	{
+		if (camera->GetCamera()->GetProjectionType() == ProjectionType::Perspective)
+			return camera;
+	}
+
+	return nullptr;
+}
+
+shared_ptr<GameObject> Scene::GetUICamera()
+{
+	for (auto& camera : _cameras)
+	{
+		if (camera->GetCamera()->GetProjectionType() == ProjectionType::Orthographic)
+			return camera;
+	}
+
+	return nullptr;
 }
 
 shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY)
 {
 	// 카메라 가져오기
-	shared_ptr<Camera> camera = GetCamera()->GetCamera();
+	shared_ptr<Camera> camera = GetMainCamera()->GetCamera();
 
 	// 화면의 가로 / 세로
 	float width = GRAPHICS->GetViewport().GetWidht();
@@ -105,6 +133,11 @@ shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY)
 	// 모든 GameObject 순회
 	for (auto& gameObject : gameObjects)
 	{
+		// 해당 오브젝트가 카메라가 Culling하는 Layer에 있으면 패스
+		// ex) Layer_UI
+		if (camera->IsCulled(gameObject->GetLayerIndex()))
+			continue;
+
 		// Collider가 없음
 		if (gameObject->GetCollider() == nullptr)
 			continue;
@@ -156,6 +189,38 @@ shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY)
 	}
 
 	return picked;
+}
+
+void Scene::PickUI()
+{
+	// 좌클릭 중이 아니면 리턴
+	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON) == false)
+		return;
+
+	// UI를 표시하는 Camera가 없음
+	if (GetUICamera() == nullptr)
+		return;
+
+	// 마우스 클릭 위치
+	POINT screenPt = INPUT->GetMousePos();
+
+	// UI 카메라 가져옴
+	shared_ptr<Camera> camera = GetUICamera()->GetCamera();
+
+	// Scene에 있는 모든 Object 
+	// Update() 과정에서 GameObject가 삭제되는 일이 발생할 수 있기 때문에 참조가 아닌 복사로 진행
+	const auto gameObjects = GetObjects();
+
+	for (auto& gameObject : gameObjects)
+	{
+		if (gameObject->GetButton() == nullptr)
+			continue;
+
+		// UI가 Picked 되었으면 클릭 이벤트
+		if (gameObject->GetButton()->Picked(screenPt))
+			gameObject->GetButton()->InvokeOnClicked();
+	}
+
 }
 
 void Scene::CheckCollision()

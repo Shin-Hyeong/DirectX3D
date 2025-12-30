@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Camera.h"
+#include "Scene.h"
 
 Matrix Camera::S_MatView = Matrix::Identity;
 Matrix Camera::S_MatProjection = Matrix::Identity;
@@ -34,7 +35,7 @@ void Camera::UpdateMatrix()
 	// 카메라의 윗 방향
 	Vec3 upDirection = GetTransform()->GetUp();
 	// 카메라 위치, 바라보는 방향, 윗 방향을 통해 View 변환 행렬 구함
-	_matView = S_MatView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
+	_matView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
 	// 혹은 카메라의 matWorld의 역행렬을 사용해도 됨
 	// S_MatView = GetTransform()->GetWorldMatrix().Invert();
 	
@@ -42,12 +43,46 @@ void Camera::UpdateMatrix()
 	if (_type == ProjectionType::Perspective)
 	{
 		// 카메라의 각도(FOV, 180 / 4) , 화면 비율(800 / 600), 근거리(1), 원거리(100)
-		_matProjection = S_MatProjection = ::XMMatrixPerspectiveFovLH(_fov, _width/ _height, _near, _far );
+		_matProjection = ::XMMatrixPerspectiveFovLH(_fov, _width/ _height, _near, _far );
 	}
 	// 직교형
 	else
 	{
 		// 화면 가로(8), 화면 세로(6), 근거리(0), 원거리(1)
-		_matProjection = S_MatProjection = ::XMMatrixOrthographicLH(8, 6, 0.f, 1.f);
+		_matProjection = ::XMMatrixOrthographicLH(_width, _height, _near, _far);
 	}
+}
+
+void Camera::SortGameObject()
+{
+	shared_ptr<Scene> scene = CUR_SCENE;
+	unordered_set<shared_ptr<GameObject>>& gameObjects = scene->GetObjects();
+
+	_vecForward.clear();
+
+	for (auto& gameObject : gameObjects)
+	{
+		// 그릴 대상이 아님
+		if (IsCulled(gameObject->GetLayerIndex()))
+			continue;
+
+		// Renderer를 가지고 있지 않음
+		if (gameObject->GetMeshRenderer() == nullptr &&
+			gameObject->GetModelRenderer() == nullptr &&
+			gameObject->GetModelAnimator() == nullptr)
+			continue;
+
+		// 렌더링할 Object 저장
+		_vecForward.push_back(gameObject);
+	}
+}
+
+void Camera::Render_Forward()
+{
+	// Shader에 전달될 Viw, Projection 행렬
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+
+	// _vecForward에 저장된 Object들을 Rendering
+	GET_SINGLE(InstancingManager)->Render(_vecForward);
 }

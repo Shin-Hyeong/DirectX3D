@@ -9,6 +9,7 @@
 #include "ModelAnimator.h"
 #include "BaseCollider.h"
 #include "Terrain.h"
+#include "Button.h"
 
 
 GameObject::GameObject()
@@ -178,4 +179,10 @@ shared_ptr<Terrain> GameObject::GetTerrain()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Terrain);
 	return static_pointer_cast<Terrain>(component);
+}
+
+shared_ptr<Button> GameObject::GetButton()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
+	return static_pointer_cast<Button>(component);
 }

@@ -10,6 +10,7 @@ class ModelRenderer;
 class Light;
 class BaseCollider;
 class Terrain;
+class Button;
 
 // 하나의 오브젝트, Component을 추가하지 않으면 빈 깡통과 같음
 
@@ -54,6 +55,11 @@ public:
 	shared_ptr<BaseCollider> GetCollider();
 	// Terrain 반환
 	shared_ptr<Terrain>	GetTerrain();
+	// Button 반환
+	shared_ptr<Button> GetButton();
+
+	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
+	uint8 GetLayerIndex() { return _layerIndex; }
 
 private:
 	ComPtr<ID3D11Device>						_device;
@@ -65,5 +71,9 @@ protected:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _component;
 	// 스크립트들을 저장하는 동적 배열
 	vector<shared_ptr<MonoBehaviour>> _scripts;
+
+	// 해당 Object가 몇번 Layer에 있을 것인지
+	// ex) UI -> 1번 Layer
+	uint8 _layerIndex = 0;
 };
 

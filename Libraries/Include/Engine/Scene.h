@@ -8,18 +8,24 @@ public:
 	virtual void Update();
 	virtual void LateUpdate();
 
+	virtual void Render();
+
 	virtual void Add(shared_ptr<GameObject> object);
 	virtual void Remove(shared_ptr<GameObject> object);
 
-	unordered_set<shared_ptr<GameObject>> GetObjects() { return _objects; }
-	// 메인 카메라 반환
-	shared_ptr<GameObject> GetCamera() { return _camera.empty() ? nullptr : *_camera.begin(); }
+	unordered_set<shared_ptr<GameObject>>& GetObjects() { return _objects; }
+	// 메인 카메라 반환, _camera에서 첫번째 Prespective 카메라 반환
+	shared_ptr<GameObject> GetMainCamera();
+	// UI 카메라 반환, _camera에서 첫번째 Orthographci 카메라 반환
+	shared_ptr<GameObject> GetUICamera();
 	// 메인 Light 반환
 	shared_ptr<GameObject> GetLight() { return _light.empty() ? nullptr : *_light.begin(); }
 
 	// Picking
 	// 모든 GameObject, Terrain의 정점에 판정 검사를 하기 때문에 비효율적임
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
+	// UI를 Pick
+	void PickUI();
 
 	// 다른 Collider끼리의 충돌 감지 확인
 	void CheckCollision();
@@ -29,7 +35,7 @@ private:
 	unordered_set<shared_ptr<GameObject>> _objects;
 
 	// Camera
-	unordered_set<shared_ptr<GameObject>> _camera;
+	unordered_set<shared_ptr<GameObject>> _cameras;
 	// Light 
 	unordered_set<shared_ptr<GameObject>> _light;
 

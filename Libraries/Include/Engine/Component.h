@@ -13,6 +13,7 @@ enum class ComponentType : uint8
 	Light,
 	Collider,
 	Terrain,
+	Button,
 
 	// 위로는 고정적으로 사용되는 Component
 	Script,

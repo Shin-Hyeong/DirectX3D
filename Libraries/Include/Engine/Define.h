@@ -27,3 +27,9 @@ public:										\
 #define INSTANCING	GET_SINGLE(InstancingManager)
 #define SCENE		GET_SINGLE(SceneManager)
 #define CUR_SCENE	SCENE->GetCurrentScene()
+
+enum LayerMask
+{
+	Layer_Default = 0,
+	Layer_UI = 1
+};
