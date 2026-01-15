@@ -23,7 +23,7 @@ void Transform::Update()
 
 // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 // Quaternion ¡æ Angles
-Vec3 ToEulerAngles(Quaternion q) 
+Vec3 Transform::ToEulerAngles(Quaternion q)
 {
 	Vec3 angles;
 

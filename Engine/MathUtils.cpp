@@ -770,7 +770,7 @@ Vec3 MathUtils::Barycentric(const Point3D& p, const Triangle3D& t)
 	Vec3 v0 = b - a;
 	Vec3 v1 = c - a;
 	Vec3 v2 = p - a;
-
+ 
 	float d00 = v0.Dot(v0);
 	float d01 = v0.Dot(v1);
 	float d11 = v1.Dot(v1);
@@ -785,5 +785,33 @@ Vec3 MathUtils::Barycentric(const Point3D& p, const Triangle3D& t)
 
 	// 2. SimpleMath::Barycentric 직접 호출해서 위치 벡터 반환!
 	return Vec3::Barycentric(a, b, c, v_weight, w_weight);
+}
+
+float MathUtils::Random(float r1, float r2)
+{
+	float random = ((float)rand() / (float)RAND_MAX);
+	float diff = r2 - r1;
+	float val = random * diff;
+
+	return r1 + val;
+}
+
+Vec2 MathUtils::RandomVec2(float r1, float r2)
+{
+	Vec2 result;
+	result.x = Random(r1, r2);
+	result.y = Random(r1, r2);
+
+	return result;
+}
+
+Vec3 MathUtils::RandomVec3(float r1, float r2)
+{
+	Vec3 result;
+	result.x = Random(r1, r2);
+	result.y = Random(r1, r2);
+	result.z = Random(r1, r2);
+
+	return result;
 }
 

@@ -10,6 +10,8 @@
 #include "BaseCollider.h"
 #include "Terrain.h"
 #include "Button.h"
+#include "BillBoard.h"
+#include "SnowBillboard.h"
 
 
 GameObject::GameObject()
@@ -185,4 +187,16 @@ shared_ptr<Button> GameObject::GetButton()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
 	return static_pointer_cast<Button>(component);
+}
+
+shared_ptr<BillBoard> GameObject::GetBillBoard()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::BillBoard);
+	return static_pointer_cast<BillBoard>(component);
+}
+
+shared_ptr<SnowBillboard> GameObject::GetSnowBillboard()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::SnowBillboard);
+	return static_pointer_cast<SnowBillboard>(component);
 }

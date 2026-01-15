@@ -14,6 +14,8 @@ enum class ComponentType : uint8
 	Collider,
 	Terrain,
 	Button,
+	BillBoard,
+	SnowBillboard,
 
 	// 위로는 고정적으로 사용되는 Component
 	Script,

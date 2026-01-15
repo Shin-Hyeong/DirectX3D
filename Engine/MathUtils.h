@@ -1,6 +1,12 @@
 #pragma once
 #include "Primitive3D.h"
 
+struct Interval3D
+{
+	float min;
+	float max;
+};
+
 struct MathUtils
 {
 	// ********************
@@ -138,10 +144,15 @@ struct MathUtils
 
 	// Barycentric좌표를 사용하여 Tirangle내에 Point3D가 특정 비율 위치 계산
 	static Vec3 Barycentric(const Point3D& p, const Triangle3D& t);
+
+
+	// ************
+	// Random
+	// ************
+
+	static float Random(float r1, float r2);
+	static Vec2 RandomVec2(float r1, float r2);
+	static Vec3 RandomVec3(float r1, float r2);
 };
 
-struct Interval3D
-{
-	float min;
-	float max;
-};
+

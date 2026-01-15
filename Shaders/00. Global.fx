@@ -59,6 +59,16 @@ struct VertexTextureNormalTangent
     float3 tangent : TANGENT;
 };
 
+struct VertexTextureNormalTangentBlend
+{
+    float4 position : POSITION;
+    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float4 blendIndices : BLEND_INDICES;
+    float4 blendWeights : BLEND_WEIGHTS;
+};
+
 
 ///////////////////
 // Vertex Output //
@@ -117,6 +127,86 @@ RasterizerState FillModeWireFrame
     FillMode = Wireframe; // 와이퍼 프레임으로 보이도록 설정
 };
 
+// 정점의 인덱스 순서가 시계방향이 앞인지 뒤인지 설정
+// 반시계 방향이 앞면으로 인식하도록 함. 
+// - 기존은 시계방향이 앞으로 되어있음.
+// - SkyBox에서 Sphere 안쪽이 Rendering 되도록 설정하기 위함
+RasterizerState FrontCounterClockwiseTrue
+{
+    FrontCounterClockwise = true;
+};
+
+/////////////////
+// Blend State //
+/////////////////
+
+// 일정 비율에 따라 두 색상을 Blend함
+// Src : a%, Dest : (100 - a) %
+BlendState AlphaBlend
+{
+    AlphaToCoverageEnable = false;
+
+    BlendEnable[0] = true;
+    SrcBlend[0] = SRC_ALPHA;
+    DestBlend[0] = INV_SRC_ALPHA;
+    BlendOp[0] = ADD;
+
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+
+    RenderTargetWriteMask[0] = 15;
+};
+
+BlendState AlphaBlendAlphaToCoverageEnable
+{
+    AlphaToCoverageEnable = true;
+
+    BlendEnable[0] = true;
+    SrcBlend[0] = SRC_ALPHA;
+    DestBlend[0] = INV_SRC_ALPHA;
+    BlendOp[0] = ADD;
+
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+
+    RenderTargetWriteMask[0] = 15;
+};
+
+// 두개의 색상을 50:50으로 섞음
+BlendState AdditiveBlend
+{
+    AlphaToCoverageEnable = true;
+
+    BlendEnable[0] = true;
+    SrcBlend[0] = One;
+    DestBlend[0] = One;
+    BlendOp[0] = ADD;
+
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+
+    RenderTargetWriteMask[0] = 15;
+};
+
+BlendState AdditiveBlendAlphaToCoverageEnable
+{
+    AlphaToCoverageEnable = true;
+
+    BlendEnable[0] = true;
+    SrcBlend[0] = One;
+    DestBlend[0] = One;
+    BlendOp[0] = ADD;
+
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+
+    RenderTargetWriteMask[0] = 15;
+};
+
 
 ///////////
 // Macro //
@@ -132,6 +222,14 @@ pass name											\
 pass name											\
 {				                                    \
     SetRasterizerState(rs);							\
+    SetVertexShader(CompileShader(vs_5_0, vs()));	\
+    SetPixelShader(CompileShader(ps_5_0, ps()));	\
+}
+
+#define PASS_BS_VP(name, bs, vs, ps)				\
+pass name											\
+{				                                    \
+    SetBlendState(bs, float4(0, 0, 0, 0), 0xFF);	\
     SetVertexShader(CompileShader(vs_5_0, vs()));	\
     SetPixelShader(CompileShader(ps_5_0, ps()));	\
 }

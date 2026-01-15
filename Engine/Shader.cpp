@@ -314,3 +314,133 @@ ShaderDesc ShaderManager::GetEffect(wstring fileName)
 
 	return ShaderDesc{desc.blob, effect};
 }
+
+void Shader::PushGlobalData(const Matrix& view, const Matrix& projection)
+{
+	if (_globalEffectBuffer == nullptr)
+	{
+		// View, Projection을 전달하는 ConstantBuffer 생성
+		_globalBuffer = make_shared<ConstantBuffer<GlobalDesc>>();
+		_globalBuffer->Create();
+		// Shader에서 GlobalBuffer 가져와서 Cashing
+		_globalEffectBuffer = GetConstantBuffer("GlobalBuffer");
+	}
+
+	_globalDesc.View = view;
+	_globalDesc.Projection = projection;
+	_globalDesc.VP = view * projection;
+	_globalDesc.VInv = view.Invert();
+
+	// ConstantBuffer에 데이터 삽입
+	_globalBuffer->CopyData(_globalDesc);
+	// DeviceContext에 데이터 전달
+	_globalEffectBuffer->SetConstantBuffer(_globalBuffer->GetComPtr().Get());
+}
+
+void Shader::PushTransformData(const TransformDesc& desc)
+{
+	if (_transformEffectBuffer == nullptr)
+	{
+		// World을 전달하는 ConstantBuffer 생성
+		_transformBuffer = make_shared<ConstantBuffer<TransformDesc>>();
+		_transformBuffer->Create();
+		// Shader에서 TransformBuffer 생성
+		_transformEffectBuffer = GetConstantBuffer("TransformBuffer");
+	}
+
+	_transformDesc = desc;
+	// ConstantBuffer에 데이터 삽입
+	_transformBuffer->CopyData(_transformDesc);
+	// DeviceContext에 데이터 전달
+	_transformEffectBuffer->SetConstantBuffer(_transformBuffer->GetComPtr().Get());
+}
+
+void Shader::PushLightData(const LightDesc& desc)
+{
+	if (_lightEffectBuffer == nullptr)
+	{
+		// Light관련 Desc를 전달하는 ConstantBuffer 생성
+		_lightBuffer = make_shared<ConstantBuffer<LightDesc>>();
+		_lightBuffer->Create();
+		_lightEffectBuffer = GetConstantBuffer("LightBuffer");
+	}
+
+	_lightDesc = desc;
+	_lightBuffer->CopyData(_lightDesc);
+	_lightEffectBuffer->SetConstantBuffer(_lightBuffer->GetComPtr().Get());
+}
+
+void Shader::PushMaterialData(const MaterialDesc& desc)
+{
+	if (_materialEffectBuffer == nullptr)
+	{
+		// Material관련 Desc를 전달한 ConstantBuffer 생성
+		_materialBuffer = make_shared<ConstantBuffer<MaterialDesc>>();
+		_materialBuffer->Create();
+		_materialEffectBuffer = GetConstantBuffer("MaterialBuffer");
+	}
+
+	_materialDesc = desc;
+	_materialBuffer->CopyData(_materialDesc);
+	_materialEffectBuffer->SetConstantBuffer(_materialBuffer->GetComPtr().Get());
+}
+
+void Shader::PushBoneData(const BoneDesc& desc)
+{
+	if (_boneEffectBuffer == nullptr)
+	{
+		// Bone관련 Desc를 전달한 ConstantBuffer 생성
+		_boneBuffer = make_shared<ConstantBuffer<BoneDesc>>();
+		_boneBuffer->Create();
+		_boneEffectBuffer = GetConstantBuffer("BoneBuffer");
+	}
+
+	_boneDesc = desc;
+	_boneBuffer->CopyData(_boneDesc);
+	_boneEffectBuffer->SetConstantBuffer(_boneBuffer->GetComPtr().Get());
+}
+
+void Shader::PushKeyframeData(const KeyframeDesc& desc)
+{
+	if (_keyframeEffectBuffer == nullptr)
+	{
+		// Animation(Keyframe)관련 Desc를 전달한 ConstantBuffer 생성
+		_keyframeBuffer = make_shared<ConstantBuffer<KeyframeDesc>>();
+		_keyframeBuffer->Create();
+		_keyframeEffectBuffer = GetConstantBuffer("KeyframeBuffer");
+	}
+
+	_keyframeDesc = desc;
+	_keyframeBuffer->CopyData(_keyframeDesc);
+	_keyframeEffectBuffer->SetConstantBuffer(_keyframeBuffer->GetComPtr().Get());
+}
+
+void Shader::PushTweenData(const InstancedTweenDesc& desc)
+{
+	if (_tweenEffectBuffer == nullptr)
+	{
+		// Tween관련 Desc를 전달한 ConstantBuffer 생성
+		_tweenBuffer = make_shared<ConstantBuffer<InstancedTweenDesc>>();
+		_tweenBuffer->Create();
+		_tweenEffectBuffer = GetConstantBuffer("TweenBuffer");
+	}
+
+	_tweenDesc = desc;
+	_tweenBuffer->CopyData(_tweenDesc);
+	_tweenEffectBuffer->SetConstantBuffer(_tweenBuffer->GetComPtr().Get());
+}
+
+void Shader::PushSnowData(const SnowBillboardDesc& desc)
+{
+	if (_snowEffectBuffer == nullptr)
+	{
+		// Tween관련 Desc를 전달한 ConstantBuffer 생성
+		_snowBuffer = make_shared<ConstantBuffer<SnowBillboardDesc>>();
+		_snowBuffer->Create();
+		_snowEffectBuffer = GetConstantBuffer("SnowBuffer");
+	}
+
+	_snowDesc = desc;
+	_snowBuffer->CopyData(_snowDesc);
+	_snowEffectBuffer->SetConstantBuffer(_snowBuffer->GetComPtr().Get());
+}

@@ -36,6 +36,8 @@
 // #include "CollisionDemo.h"
 #include "OrthographicDemo.h"
 #include "ButtonDemo.h"
+#include "BillBoardDemo.h"
+#include "SnowBillboardDemo.h"
 
 
 // 프로그램 시작 함수
@@ -50,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.height = 600;
 	desc.clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	// 실행시킬 앱(실행 단위)
-	desc.app = make_shared<ButtonDemo>();
+	desc.app = make_shared<SnowBillboardDemo>();
 
 	GAME->Run(desc);
 

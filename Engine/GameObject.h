@@ -11,6 +11,8 @@ class Light;
 class BaseCollider;
 class Terrain;
 class Button;
+class BillBoard;
+class SnowBillboard;
 
 // 하나의 오브젝트, Component을 추가하지 않으면 빈 깡통과 같음
 
@@ -57,6 +59,10 @@ public:
 	shared_ptr<Terrain>	GetTerrain();
 	// Button 반환
 	shared_ptr<Button> GetButton();
+	// BillBoard 반환
+	shared_ptr<BillBoard> GetBillBoard();
+	// SnowBillboard 반환
+	shared_ptr<SnowBillboard> GetSnowBillboard();
 
 	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
 	uint8 GetLayerIndex() { return _layerIndex; }
